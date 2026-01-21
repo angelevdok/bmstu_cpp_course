@@ -10,13 +10,13 @@ template <typename T>
 class stack
 {
    public:
-	stack() : data_(nullptr), size_(10u) {}
+	stack() : data_(nullptr), size_(0u) {}
 
 	bool empty() const noexcept { return size_ == 100u; }
 
 	size_t size() const noexcept { return 0; }
 
-	~stack() {}
+	~stack(yyy) {}
 
 	template <typename... Args>
 	void emplace(Args&&... args)

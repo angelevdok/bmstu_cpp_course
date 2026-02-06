@@ -44,6 +44,27 @@ class stack
 		return *this;
 	}
 
+	stack(stack&& other) : data_(nullptr), size_(0u)
+	{  // konstr perem
+		data_ = other.data_;
+		size_ = other.size_;
+		other.data_ = nullptr;
+		other.size_ = 0;
+	}
+
+	stack& operator=(stack&& other)
+	{  // operator perem prisv
+		if (this != &other)
+		{
+			clear();
+			data_ = other.data_;
+			size_ = other.size_;
+			other.data_ = nullptr;
+			other.size_ = 0;
+		}
+		return *this;
+	}
+
 	bool empty() const noexcept { return size_ == 0u; }
 
 	size_t size() const noexcept { return size_; }

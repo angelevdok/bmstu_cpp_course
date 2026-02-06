@@ -2,6 +2,7 @@
 
 #include <exception>
 #include <iostream>
+#include <new>
 #include <utility>
 
 namespace bmstu
@@ -10,13 +11,44 @@ template <typename T>
 class stack
 {
    public:
-	stack() : data_(nullptr), size_(0u) {}
+	stack() : data_(nullptr), size_(0u) {}	// konstr
+
+	stack(const stack& other) : data_(nullptr), size_(0u)
+	{  // konstr kop
+		size_ = other.size_;
+		if (size_ > 0)
+		{
+			data_ = (T*)::operator new(sizeof(T) * size_);
+			for (size_t i = 0; i < size_; ++i)
+			{
+				new (data_ + i) T(other.data_[i]);
+			}
+		}
+	}
+
+	stack& operator=(const stack& other)
+	{  // operator kop prisv
+		if (this != &other)
+		{
+			clear();
+			size_ = other.size_;
+			if (size_ > 0)
+			{
+				data_ = (T*)::operator new(sizeof(T) * size_);
+				for (size_t i = 0; i < size_; ++i)
+				{
+					new (data_ + i) T(other.data_[i]);
+				}
+			}
+		}
+		return *this;
+	}
 
 	bool empty() const noexcept { return size_ == 0u; }
 
 	size_t size() const noexcept { return size_; }
 
-	~stack() { clear(); }
+	~stack() { clear(); }  // destr
 
 	template <typename... Args>
 	void emplace(Args&&... args)

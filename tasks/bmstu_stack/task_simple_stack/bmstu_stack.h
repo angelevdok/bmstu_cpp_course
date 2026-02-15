@@ -11,10 +11,10 @@ template <typename T>
 class stack
 {
    public:
-	stack() : data_(nullptr), size_(0u) {}	// konstr
+	stack() : data_(nullptr), size_(0u) {}
 
 	stack(const stack& other) : data_(nullptr), size_(0u)
-	{  // konstr kop
+	{
 		size_ = other.size_;
 		if (size_ > 0)
 		{
@@ -27,7 +27,7 @@ class stack
 	}
 
 	stack& operator=(const stack& other)
-	{  // operator kop prisv
+	{
 		if (this != &other)
 		{
 			clear();
@@ -45,7 +45,7 @@ class stack
 	}
 
 	stack(stack&& other) : data_(nullptr), size_(0u)
-	{  // konstr perem
+	{
 		data_ = other.data_;
 		size_ = other.size_;
 		other.data_ = nullptr;
@@ -53,7 +53,7 @@ class stack
 	}
 
 	stack& operator=(stack&& other)
-	{  // operator perem prisv
+	{
 		if (this != &other)
 		{
 			clear();
@@ -69,7 +69,7 @@ class stack
 
 	size_t size() const noexcept { return size_; }
 
-	~stack() { clear(); }  // destr
+	~stack() { clear(); }
 
 	template <typename... Args>
 	void emplace(Args&&... args)

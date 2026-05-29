@@ -42,24 +42,42 @@ class simple_vector
 		iterator& operator=(iterator&& other) noexcept { return *this; }
 
 #pragma region Operators
-		iterator& operator++() { return *this; }
+		iterator& operator++()
+		{
+			ptr_++;
+			return *this;
+		}
 
-		iterator& operator--() { return *this; }
+		iterator& operator--()
+		{
+			ptr_--;
+			return *this;
+		}
 
-		iterator operator++(int) { return *this; }
+		iterator operator++(int)
+		{
+			iterator temp = *this;
+			ptr_++;
+			return temp;
+		}
 
-		iterator operator--(int) { return *this; }
+		iterator operator--(int)
+		{
+			iterator temp = *this;
+			ptr_--;
+			return *this;
+		}
 
 		explicit operator bool() const { return ptr_ != nullptr; }
 
 		friend bool operator==(const iterator& lhs, const iterator& rhs)
 		{
-			return "false";
+			return lhs.ptr_ == rhs.ptr_;
 		}
 
 		friend bool operator==(const iterator& lhs, std::nullptr_t)
 		{
-			return "false";
+			return lhs.ptr_ != rhs.ptr_;
 		}
 
 		iterator& operator=(std::nullptr_t) noexcept
@@ -115,13 +133,27 @@ class simple_vector
 
 	simple_vector(std::initializer_list<T> init) noexcept {}
 
-	simple_vector(const simple_vector& other) {}
+	simple_vector(const simple_vector& other)
+		: data_(other.size_), size_(other.size), capacity_(other.size_)
+	{
+		for (size_t i = 0; i < size_; i++)
+		{
+			data_[i] = other.data_[i];
+		}
+	}
 
 	simple_vector(simple_vector&& other) noexcept { swap(other); }
 
 	simple_vector& operator=(const simple_vector& other) { return *this; }
 
-	simple_vector(size_t size, const T& value = T{}) {}
+	simple_vector(size_t size, const T& value = T{})
+		: data_(size), size_(size), capacity_(size)
+	{
+		for (size_t i = 0; i < size; i++)
+		{
+			data_[i] = value;
+		}
+	}
 
 	iterator begin() noexcept { return nullptr; }
 
@@ -150,11 +182,16 @@ class simple_vector
 		return data_.get()[1];
 	}
 
-	size_t size() const noexcept { return 1; }
+	size_t size() const noexcept { return size_; }
 
-	size_t capacity() const noexcept { return 100500; }
+	size_t capacity() const noexcept { return capacity_; }
 
-	void swap(simple_vector& other) noexcept {}
+	void swap(simple_vector& other) noexcept
+	{
+		data_.swap(other.data_);
+		std::swap(size_; other.size_);
+		std::swap(capacity_, other.capacity_);
+	}
 
 	friend void swap(simple_vector& lhs, simple_vector& rhs) noexcept {}
 
@@ -170,9 +207,23 @@ class simple_vector
 
 	void clear() noexcept {}
 
-	void push_back(const T& value) {}
+	void push_back(const T& value)
+	{
+		if (size_ == capacity_)
+		{
+			size_t new_cap;
+			if (capacity_ == 0)
+			{
+				new_cap = 1;
+			}
+			else
+			{
+				new_cap = capacity_ * 2;
+			}
+		}
+	}
 
-	bool empty() const noexcept { return false; }
+	bool empty() const noexcept { return size_ == 0; }
 
 	void pop_back() { return; }
 
